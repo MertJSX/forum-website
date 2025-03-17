@@ -1,0 +1,8 @@
+.signup-container {
+    .signup-child:first-child {
+        box-shadow: 0px 5px 5px black;
+    }
+    .signup-child:nth-child(2) {
+        box-shadow: 5px 5px 5px black;
+    }
+}
