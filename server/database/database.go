@@ -8,12 +8,27 @@ import (
 	"github.com/MertJSX/forum-website/server/types"
 )
 
-func CreateUserTable(db *sql.DB) {
-	sqlStmt := `CREATE TABLE IF NOT EXISTS users (
-		id INTEGER NOT NULL PRIMARY KEY  AUTOINCREMENT,
+func CreateUsersTable(db *sql.DB) {
+	sqlStmt := `
+	CREATE TABLE IF NOT EXISTS users (
+		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 		username TEXT,
 		email TEXT,
 		password TEXT
+	);`
+	_, err := db.Exec(sqlStmt)
+	if err != nil {
+		log.Printf("%q: %s\n", err, sqlStmt)
+		return
+	}
+}
+
+func CreateForumsTable(db *sql.DB) {
+	sqlStmt := `
+	CREATE TABLE IF NOT EXISTS forums (
+		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+		user_id TEXT,
+		content TEXT
 	);`
 	_, err := db.Exec(sqlStmt)
 	if err != nil {

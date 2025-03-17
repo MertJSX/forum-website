@@ -19,7 +19,8 @@ func main() {
 
 	defer db.Close()
 
-	database.CreateUserTable(db)
+	database.CreateUsersTable(db)
+	database.CreateForumsTable(db)
 
 	var PORT string = ":3000"
 
