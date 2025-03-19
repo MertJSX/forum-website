@@ -61,3 +61,63 @@ func CreateNewUser(db *sql.DB, usr types.User) error {
 	}
 	return nil
 }
+
+type SearchForUsersBy int
+
+const (
+	ByEmail SearchForUsersBy = iota
+	ByUsername
+	ByPassword
+	ByAll
+	ByUsernameAndPassword
+)
+
+func SearchForUsers(
+	db *sql.DB,
+	usr types.User,
+	searchBy SearchForUsersBy) ([]types.User, error) {
+	var foundList []types.User
+
+	// rows, err := db.Query("SELECT * FROM users WHERE username = ?", searchByItem)
+	var rows *sql.Rows
+	var err error
+	switch searchBy {
+	case ByEmail:
+		rows, err = db.Query("SELECT * FROM users WHERE email = ?", usr.Email)
+	case ByUsername:
+		rows, err = db.Query("SELECT * FROM users WHERE username = ?", usr.Name)
+	case ByPassword:
+		rows, err = db.Query("SELECT * FROM users WHERE password = ?", usr.Password)
+	case ByAll:
+		rows, err = db.Query("SELECT * FROM users WHERE username = ? AND email = ? AND password = ?",
+			usr.Name, usr.Email, usr.Password)
+	case ByUsernameAndPassword:
+		rows, err = db.Query("SELECT * FROM users WHERE username = ? AND password = ?",
+			usr.Name, usr.Password)
+	}
+
+	fmt.Println("First Possible Error")
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, fmt.Errorf("SearchForUsers Error %q: %v", usr, err)
+	}
+	defer rows.Close()
+
+	fmt.Println("Second Possible Error")
+
+	for rows.Next() {
+		var usr types.User
+		if err := rows.Scan(&usr.Name, &usr.Email, &usr.Password); err != nil {
+			return nil, fmt.Errorf("SearchForUsers %q: %v", usr, err)
+		}
+		foundList = append(foundList, usr)
+	}
+
+	fmt.Println("Third Possible Error")
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("SearchForUsers %q: %v", usr, err)
+	}
+	return foundList, nil
+}
