@@ -34,5 +34,9 @@ func main() {
 		return routes.HandleRegisterUser(c, db)
 	})
 
+	app.Post("/login-user", func(c *fiber.Ctx) error {
+		return routes.HandleLoginUser(c, db)
+	})
+
 	app.Listen(PORT)
 }
