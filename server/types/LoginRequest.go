@@ -1,7 +1,6 @@
 package types
 
-type User struct {
-	ID       *int   `json:"id,omitempty"`
+type LoginRequest struct {
 	Name     string `json:"username"`
 	Email    string `json:"email"`
 	Password string `json:"password"`
