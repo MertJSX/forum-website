@@ -3,9 +3,42 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { TiUserAdd } from "react-icons/ti";
 import Checkbox from "../../components/minimal-components/Checkbox/Checkbox";
 import { useState } from "react";
+import axios from "axios";
+import isValidEmail from "../../utils/isValidEmail";
+import Cookies from "js-cookie";
 
 const SignIn = () => {
-  const [rememberMe, setRememberMe] = useState(false);
+  const [emailOrUsername, setEmailOrUsername] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [rememberMe, setRememberMe] = useState<boolean>(false);
+  const [errorMsg, setErrorMsg] = useState<string>("")
+
+  function getToken() {
+    console.log(emailOrUsername);
+    console.log(password);
+
+    setErrorMsg("")
+
+    axios
+      .post("/api/login-user", {
+        username: !isValidEmail(emailOrUsername) ? emailOrUsername : "",
+        email: isValidEmail(emailOrUsername) ? emailOrUsername : "",
+        password: password,
+      })
+      .then((data) => {
+        if (data.data.error) {
+          setErrorMsg(data.data.msg)
+          return
+        }
+        console.log(data.data.token);
+        Cookies.set("token", data.data.token);
+        setEmailOrUsername("");
+        setPassword("");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   return (
     <div className="flex mt-28 m-auto justify-center items-center signup-container">
@@ -14,12 +47,6 @@ const SignIn = () => {
           <h1 className="text-blue-200 text-5xl z-10 italic font-bold">
             WELCOME AGAIN!
           </h1>
-          {/* <ul  className="text-blue-100 text-2xl list-disc list-inside">
-                    <li>Make friends</li>
-                    <li>Socialize</li>
-                    <li>Ask questions to community</li>
-                    <li>Solve your problems</li>
-                </ul> */}
         </div>
         <video
           src="/videos/signin1.mp4"
@@ -50,11 +77,19 @@ const SignIn = () => {
         <input
           className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
           placeholder="Username / email"
+          value={emailOrUsername}
+          onChange={(e) => {
+            setEmailOrUsername(e.target.value);
+          }}
           type="text"
         />
         <input
           className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
           placeholder="Password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
           type="password"
         />
         <Checkbox
@@ -66,10 +101,14 @@ const SignIn = () => {
         />
         <button
           className="bg-blue-700 hover:bg-blue-600 cursor-pointer text-blue-200 w-3/4 text-lg font-bold rounded-2xl"
+          onClick={() => {
+            getToken();
+          }}
           type="submit"
         >
           Sign in
         </button>
+        <h2 className="text-red-400">{errorMsg ? errorMsg : null}</h2>
       </div>
     </div>
   );
