@@ -104,7 +104,7 @@ const SignUp = () => {
                 (e: React.ChangeEvent<HTMLInputElement>) => {
                     setUsername(e.target.value)
             }}
-            type="text" />
+            type="text" autoFocus />
         <input 
             className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
             placeholder="Email"
