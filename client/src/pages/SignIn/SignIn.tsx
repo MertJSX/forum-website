@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { TiUserAdd } from "react-icons/ti";
 import Checkbox from "../../components/minimal-components/Checkbox/Checkbox";
@@ -12,6 +12,7 @@ const SignIn = () => {
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string>("")
+  const navigate = useNavigate()
 
   function getToken() {
     console.log(emailOrUsername);
@@ -28,12 +29,13 @@ const SignIn = () => {
       .then((data) => {
         if (data.data.error) {
           setErrorMsg(data.data.msg)
+          setPassword("");
           return
         }
         console.log(data.data.token);
         Cookies.set("token", data.data.token);
+        navigate("/")
         setEmailOrUsername("");
-        setPassword("");
       })
       .catch((err) => {
         console.log(err);
@@ -82,6 +84,7 @@ const SignIn = () => {
             setEmailOrUsername(e.target.value);
           }}
           type="text"
+          autoFocus
         />
         <input
           className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
