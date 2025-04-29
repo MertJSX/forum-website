@@ -61,8 +61,4 @@ func TestDBFunctions(t *testing.T) {
 			t.Fatalf("Failed to create test user: %v", err)
 		}
 	})
-
-	t.Cleanup(func() {
-		db.Close()
-	})
 }
