@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+.navbar {
+    .navbar-item {
+        transition: 0.3s;
+        width: 10%;
+        &:hover {
+            width: 12%;
+            background-color: var(--color-slate-700);
+            
+        }
+    }
+}
