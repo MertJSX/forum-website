@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/MertJSX/forum-website/server/database"
+	"github.com/MertJSX/forum-website/server/middleware"
 	"github.com/MertJSX/forum-website/server/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -36,6 +37,14 @@ func main() {
 
 	app.Post("/login-user", func(c *fiber.Ctx) error {
 		return routes.HandleLoginUser(c, db)
+	})
+
+	app.Use("/", func(c *fiber.Ctx) error {
+		return middleware.CheckAuth(c)
+	})
+
+	app.Post("/create-forum", func(c *fiber.Ctx) error {
+		return routes.HandleCreateForum(c, db)
 	})
 
 	app.Listen(PORT)
