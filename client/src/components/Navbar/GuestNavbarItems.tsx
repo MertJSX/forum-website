@@ -18,7 +18,7 @@ const GuestNavbarItems = () => {
       </Link>
       <Link
         className="flex justify-center items-center gap-2 text-lg text-white px-4 pt-2 pb-1 navbar-item"
-        to="/"
+        to="/explore"
       >
         <IoTelescope /> Explore
       </Link>
