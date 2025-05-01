@@ -15,8 +15,8 @@ function App() {
         <Route index element={<Home />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
-        <Route path="/signup" element={<Explore />} />
-        <Route path="/signup" element={<Profile />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
