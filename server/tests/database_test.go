@@ -19,7 +19,7 @@ func SetupTestDB() *sql.DB {
 		return nil
 	}
 
-	database.CreateForumsTable(db)
+	database.CreatePostsTable(db)
 
 	database.CreateUsersTable(db)
 
@@ -43,7 +43,7 @@ func TestDBFunctions(t *testing.T) {
 	}
 
 	t.Run("Create forums table", func(t *testing.T) {
-		database.CreateForumsTable(db)
+		database.CreatePostsTable(db)
 	})
 
 	t.Run("Create users table", func(t *testing.T) {
