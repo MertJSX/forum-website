@@ -23,7 +23,8 @@ func main() {
 	defer db.Close()
 
 	database.CreateUsersTable(db)
-	database.CreateForumsTable(db)
+	database.CreatePostsTable(db)
+	database.CreateCommentsTable(db)
 
 	var PORT string = ":3000"
 
@@ -43,8 +44,12 @@ func main() {
 		return middleware.CheckAuth(c)
 	})
 
-	app.Post("/create-forum", func(c *fiber.Ctx) error {
-		return routes.HandleCreateForum(c, db)
+	app.Get("/profile", func(c *fiber.Ctx) error {
+		return routes.HandleGetProfile(c, db)
+	})
+
+	app.Post("/create-post", func(c *fiber.Ctx) error {
+		return routes.HandleCreatePost(c, db)
 	})
 
 	app.Listen(PORT)
