@@ -83,20 +83,20 @@ const SignUp = () => {
             className="w-full top-0 left-0 absolute h-full object-cover rounded-l-2xl z-0 opacity-20" 
             muted autoPlay loop />
         </div>
-        <div className="bg-gray-900 flex flex-col p-2 gap-2 items-center min-w-[400px] w-2/6 max-w-[500px] h-[600px] rounded-r-2xl signup-child">
+        <div className="bg-gray-800 flex flex-col p-2 gap-2 items-center min-w-[400px] w-2/6 max-w-[500px] h-[600px] rounded-r-2xl signup-child">
         <div className="flex">
             <Link 
                 to="/"
-                className="flex flex-row justify-center items-center min-w-10 text-white text-xl bg-gray-800 hover:bg-gray-700 p-1"
+                className="flex flex-row justify-center items-center min-w-10 text-white text-xl bg-gray-700 hover:bg-gray-600 p-1"
             ><IoArrowBackOutline /></Link>
             <Link 
                 to="/signin"
-                className="flex flex-row justify-center items-center min-w-24 gap-2 text-white text-xl bg-gray-800 hover:bg-gray-700 p-1"
+                className="flex flex-row justify-center items-center min-w-24 gap-2 text-white text-xl bg-gray-700 hover:bg-gray-600 p-1"
             ><CiLogin /> Sign in</Link>
         </div>
         <h1 className="text-blue-300 text-5xl font-bold mt-28 italic select-none">SIGN UP</h1>
         <input 
-            className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
+            className="text-center text-lg text-cyan-100 bg-gray-700 w-3/4 rounded-2xl outline-0 focus:bg-gray-600"
             placeholder="Username"
             ref={usernameRef}
             value={username}
@@ -106,7 +106,7 @@ const SignUp = () => {
             }}
             type="text" autoFocus />
         <input 
-            className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
+            className="text-center text-lg text-cyan-100 bg-gray-700 w-3/4 rounded-2xl outline-0 focus:bg-gray-600"
             placeholder="Email"
             ref={emailRef}
             value={email}
@@ -116,7 +116,7 @@ const SignUp = () => {
             }}
             type="email" />
         <input 
-            className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
+            className="text-center text-lg text-cyan-100 bg-gray-700 w-3/4 rounded-2xl outline-0 focus:bg-gray-600"
             placeholder="Password"
             ref={passwordRef}
             value={password}
