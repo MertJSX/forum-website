@@ -9,23 +9,21 @@ import (
 )
 
 func CheckAuth(c *fiber.Ctx) error {
-
-	var requestWithToken types.RequestWithToken
-
 	fmt.Println("WALLS!")
 
-	if err := c.BodyParser(requestWithToken); err != nil {
-		return c.Status(400).JSON(types.ErrorResponse{
+	var token string = c.Get("Authorization")
+	if token == "" {
+		return c.Status(401).JSON(types.ErrorResponse{
 			IsError:  true,
-			ErrorMsg: "Bad request",
+			ErrorMsg: "Token is missing",
 		})
 	}
 
 	var username string
 	var err error
 
-	if username, err = utils.VerifyToken(requestWithToken.Token, "test"); err != nil {
-		return c.Status(400).JSON(types.ErrorResponse{
+	if username, err = utils.VerifyToken(token, "test"); err != nil {
+		return c.Status(401).JSON(types.ErrorResponse{
 			IsError:  true,
 			ErrorMsg: "Invalid token",
 		})
