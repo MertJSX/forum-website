@@ -58,17 +58,17 @@ const SignIn = () => {
           loop
         />
       </div>
-      <div className="bg-gray-900 flex flex-col p-2 gap-2 items-center min-w-[400px] w-2/6 max-w-[500px] h-[600px] rounded-r-2xl signup-child">
+      <div className="bg-gray-800 flex flex-col p-2 gap-2 items-center min-w-[400px] w-2/6 max-w-[500px] h-[600px] rounded-r-2xl signup-child">
         <div className="flex">
           <Link
             to="/"
-            className="flex flex-row justify-center items-center min-w-10 text-white text-xl bg-gray-800 hover:bg-gray-700 p-1"
+            className="flex flex-row justify-center items-center min-w-10 text-white text-xl bg-gray-700 hover:bg-gray-600 p-1"
           >
             <IoArrowBackOutline />
           </Link>
           <Link
             to="/signup"
-            className="flex flex-row justify-center items-center min-w-24 gap-2 text-white text-xl bg-gray-800 hover:bg-gray-700 p-1"
+            className="flex flex-row justify-center items-center min-w-24 gap-2 text-white text-xl bg-gray-700 hover:bg-gray-600 p-1"
           >
             <TiUserAdd /> Sign up
           </Link>
@@ -77,7 +77,7 @@ const SignIn = () => {
           SIGN IN
         </h1>
         <input
-          className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
+          className="text-center text-lg text-cyan-100 bg-gray-700 w-3/4 rounded-2xl outline-0 focus:bg-gray-600"
           placeholder="Username / email"
           value={emailOrUsername}
           onChange={(e) => {
@@ -87,7 +87,7 @@ const SignIn = () => {
           autoFocus
         />
         <input
-          className="text-center text-lg text-cyan-100 bg-gray-800 w-3/4 rounded-2xl outline-0 focus:bg-gray-700"
+          className="text-center text-lg text-cyan-100 bg-gray-700 w-3/4 rounded-2xl outline-0 focus:bg-gray-600"
           placeholder="Password"
           value={password}
           onChange={(e) => {
