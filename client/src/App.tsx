@@ -7,6 +7,7 @@ import Logout from "./pages/Logout";
 import NotFoundPage from "./pages/NotFoundPage";
 import Explore from "./pages/Explore/Explore";
 import Profile from "./pages/Profile/Profile";
+import Post from "./pages/Post/Post";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/post/:postid" element={<Post />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
