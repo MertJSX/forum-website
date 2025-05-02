@@ -20,11 +20,6 @@ func HandleLoginUser(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
-	fmt.Println("What we got?")
-	fmt.Println(loginReqBody.Email)
-	fmt.Println(loginReqBody.Name)
-	fmt.Println(loginReqBody.Password)
-
 	user := new(types.User)
 	var foundUser []types.User
 	var err error
@@ -44,7 +39,10 @@ func HandleLoginUser(c *fiber.Ctx, db *sql.DB) error {
 
 	if err == nil && foundUser != nil {
 		user.Name = foundUser[0].Name
-		token, err := utils.CreateToken(user.Name, "test")
+		user.ID = foundUser[0].ID
+		var userID string = fmt.Sprintf("%d", *user.ID)
+
+		token, err := utils.CreateToken(userID, user.Name, "test")
 
 		if err != nil {
 			return c.Status(500).JSON(types.ErrorResponse{
