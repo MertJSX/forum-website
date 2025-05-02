@@ -2,20 +2,21 @@ import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
 
-const CreateNewPost = () => {
+type CreateNewPostProps = {
+  getPosts?: () => void;
+};
+
+const CreateNewPost = ({getPosts}: CreateNewPostProps) => {
   let [title, setTitle] = useState<string>("");
-  let [description, setDescription] = useState<string>("");
   let [content, setContent] = useState<string>("");
   function handleCreateNewPost(e: React.FormEvent) {
     e.preventDefault();
-    console.log({ title, description, content });
 
     axios
       .post(
         "/api/create-post",
         {
           title: title,
-          description: description,
           content: content,
         },
         {
@@ -25,8 +26,10 @@ const CreateNewPost = () => {
       .then((res) => {
         console.log(res.data);
         setTitle("");
-        setDescription("");
         setContent("");
+        if (getPosts) {
+          getPosts();
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -51,13 +54,6 @@ const CreateNewPost = () => {
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="bg-gray-700 text-white p-2 rounded-lg mb-4 w-full"
-        />
-        <input
-          type="text"
-          placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
           className="bg-gray-700 text-white p-2 rounded-lg mb-4 w-full"
         />
         <textarea
