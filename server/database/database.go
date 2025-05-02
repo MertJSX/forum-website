@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"time"
 
 	"github.com/MertJSX/forum-website/server/types"
 )
@@ -27,12 +28,11 @@ func CreatePostsTable(db *sql.DB) {
 	sqlStmt := `
 	CREATE TABLE IF NOT EXISTS posts (
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		user_id TEXT,
+		user_id INTEGER,
 		title TEXT,
-		description TEXT,
 		created_at TEXT,
 		content TEXT,
-		FOREIGN KEY(user_id) REFERENCES users(id)
+		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE
 	);`
 	_, err := db.Exec(sqlStmt)
 	if err != nil {
@@ -45,12 +45,12 @@ func CreateCommentsTable(db *sql.DB) {
 	sqlStmt := `
 	CREATE TABLE IF NOT EXISTS comments (
 		id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-		user_id TEXT,
-		post_id TEXT,
+		user_id INTEGER,
+		post_id INTEGER,
 		comment TEXT,
 		created_at TEXT,
-		FOREIGN KEY(user_id) REFERENCES users(id)
-		FOREIGN KEY(post_id) REFERENCES posts(id)
+		FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE,
+		FOREIGN KEY(post_id) REFERENCES posts(id) ON DELETE CASCADE ON UPDATE CASCADE
 	);`
 	_, err := db.Exec(sqlStmt)
 	if err != nil {
@@ -104,14 +104,14 @@ func CreateNewPost(db *sql.DB, post *types.Post) error {
 		return fmt.Errorf("Begin transaction error: %w", err)
 	}
 
-	stmt, err := tx.Prepare("INSERT INTO posts(user_id, title, description, created_at, content) values(?, ?, ?, ?, ?)")
+	stmt, err := tx.Prepare("INSERT INTO posts(user_id, title, created_at, content) values(?, ?, ?, ?)")
 	if err != nil {
 		log.Fatal(err)
 		return fmt.Errorf("Prepare statement error: %w", err)
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(post.UserId, post.Title, post.Description, post.CreatedAt, post.Content)
+	_, err = stmt.Exec(post.UserId, post.Title, time.Now().Unix(), post.Content)
 	if err != nil {
 		log.Fatal(err)
 		return fmt.Errorf("Statement execute error: %w", err)
@@ -139,7 +139,7 @@ func CreateNewComment(db *sql.DB, comment *types.Comment) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(comment.UserId, comment.PostId, comment.Comment, comment.CreatedAt)
+	_, err = stmt.Exec(comment.UserId, comment.PostId, comment.Comment, time.Now().Unix())
 	if err != nil {
 		log.Fatal(err)
 		return fmt.Errorf("Statement execute error: %w", err)
@@ -154,7 +154,12 @@ func CreateNewComment(db *sql.DB, comment *types.Comment) error {
 }
 
 func GetPosts(db *sql.DB) ([]types.Post, error) {
-	rows, err := db.Query("SELECT * FROM posts ORDER BY created_at DESC")
+	rows, err := db.Query(`
+		SELECT posts.id, posts.user_id, posts.title, posts.created_at, posts.content, users.username 
+		FROM posts 
+		INNER JOIN users ON posts.user_id = users.id 
+		ORDER BY posts.created_at DESC
+	`)
 
 	if err != nil {
 		fmt.Println(err)
@@ -167,7 +172,7 @@ func GetPosts(db *sql.DB) ([]types.Post, error) {
 
 	for rows.Next() {
 		var post types.Post
-		if err := rows.Scan(&post.ID, &post.UserId, &post.Title, &post.Description, &post.CreatedAt, &post.Content); err != nil {
+		if err := rows.Scan(&post.ID, &post.UserId, &post.Title, &post.CreatedAt, &post.Content, &post.Author); err != nil {
 			fmt.Println(err)
 			return nil, fmt.Errorf("GetPosts Error %v: %v", post, err)
 		}
@@ -179,6 +184,51 @@ func GetPosts(db *sql.DB) ([]types.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func GetPostByID(db *sql.DB, postId string) (*types.Post, error) {
+	row := db.QueryRow(`
+		SELECT posts.id, posts.user_id, posts.title, posts.created_at, posts.content, users.username 
+		FROM posts 
+		INNER JOIN users ON posts.user_id = users.id 
+		WHERE posts.id = ?
+	`, postId)
+
+	var post types.Post
+	if err := row.Scan(&post.ID, &post.UserId, &post.Title, &post.CreatedAt, &post.Content, &post.Author); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("no post found with id %s", postId)
+		}
+		return nil, fmt.Errorf("GetPostByID Error: %v", err)
+	}
+
+	return &post, nil
+}
+
+func GetCommentsForPost(db *sql.DB, postId int) ([]types.Comment, error) {
+	rows, err := db.Query("SELECT * FROM comments WHERE post_id = ? ORDER BY created_at DESC", postId)
+	if err != nil {
+		fmt.Println(err)
+		return nil, fmt.Errorf("GetCommentsForPost Error: %v", err)
+	}
+	defer rows.Close()
+
+	var comments []types.Comment
+
+	for rows.Next() {
+		var comment types.Comment
+		if err := rows.Scan(&comment.ID, &comment.UserId, &comment.PostId, &comment.Comment, &comment.CreatedAt); err != nil {
+			fmt.Println(err)
+			return nil, fmt.Errorf("GetCommentsForPost Error %v: %v", comment, err)
+		}
+		comments = append(comments, comment)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("GetCommentsForPost Error %v: %v", comments, err)
+	}
+
+	return comments, nil
 }
 
 type SearchForUsersBy int
