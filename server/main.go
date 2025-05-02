@@ -40,6 +40,14 @@ func main() {
 		return routes.HandleLoginUser(c, db)
 	})
 
+	app.Get("/posts", func(c *fiber.Ctx) error {
+		return routes.HandleGetPosts(c, db)
+	})
+
+	app.Get("/posts/:id", func(c *fiber.Ctx) error {
+		return routes.HandleGetPost(c, db)
+	})
+
 	app.Use("/", func(c *fiber.Ctx) error {
 		return middleware.CheckAuth(c)
 	})
@@ -50,6 +58,10 @@ func main() {
 
 	app.Post("/create-post", func(c *fiber.Ctx) error {
 		return routes.HandleCreatePost(c, db)
+	})
+
+	app.Post("/create-comment", func(c *fiber.Ctx) error {
+		return routes.HandleCommentPost(c, db)
 	})
 
 	app.Listen(PORT)
