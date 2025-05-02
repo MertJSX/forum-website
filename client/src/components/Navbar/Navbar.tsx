@@ -5,7 +5,7 @@ import "./Navbar.css";
 
 const Navbar = () => {
   return (
-    <div>
+    <div className="sticky top-0 left-0 right-0">
       {
         Cookies.get("token") ?
         <UserNavbarItems /> :
