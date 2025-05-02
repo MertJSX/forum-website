@@ -2,6 +2,8 @@ package routes
 
 import (
 	"database/sql"
+	"fmt"
+	"strconv"
 
 	"github.com/MertJSX/forum-website/server/database"
 	"github.com/MertJSX/forum-website/server/types"
@@ -9,16 +11,26 @@ import (
 )
 
 func HandleCreatePost(c *fiber.Ctx, db *sql.DB) error {
-	request := new(types.Post)
+	newPost := new(types.Post)
 
-	if err := c.BodyParser(request); err != nil {
+	if err := c.BodyParser(newPost); err != nil {
 		return c.Status(400).JSON(types.ErrorResponse{
 			IsError:  true,
 			ErrorMsg: "Bad request",
 		})
 	}
 
-	if err := database.CreateNewPost(db, request); err != nil {
+	var err error
+	newPost.UserId, err = strconv.Atoi(c.Locals("userID").(string))
+	if err != nil {
+		return c.Status(400).JSON(types.ErrorResponse{
+			IsError:  true,
+			ErrorMsg: "Bad request",
+		})
+	}
+
+	if err := database.CreateNewPost(db, newPost); err != nil {
+		fmt.Println("Error creating post:", err)
 		return c.Status(500).JSON(types.ErrorResponse{
 			IsError:  true,
 			ErrorMsg: "Internal server error",
