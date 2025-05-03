@@ -650,18 +650,16 @@ func SearchForUsers(
 		err = db.QueryRow(`
 			SELECT COUNT(*) FROM followers WHERE followed_id = ?
 		`, usr.ID).Scan(&usr.Followers)
-		if err != nil {
-			fmt.Println(err)
-			return nil, fmt.Errorf("SearchForUsers Followers Error %v: %v", usr, err)
+		if err != nil && err != sql.ErrNoRows {
+			fmt.Println("Error fetching followers:", err)
 		}
 
 		// Get the number of following
 		err = db.QueryRow(`
 			SELECT COUNT(*) FROM followers WHERE follower_id = ?
 		`, usr.ID).Scan(&usr.Following)
-		if err != nil {
-			fmt.Println(err)
-			return nil, fmt.Errorf("SearchForUsers Following Error %v: %v", usr, err)
+		if err != nil && err != sql.ErrNoRows {
+			fmt.Println("Error fetching following:", err)
 		}
 
 		foundList = append(foundList, usr)
