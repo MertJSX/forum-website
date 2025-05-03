@@ -25,7 +25,6 @@ const CreateNewPost = ({getPosts}: CreateNewPostProps) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         navigate("/post/" + res.data.postID);
         setTitle("");
         setContent("");

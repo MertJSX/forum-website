@@ -27,8 +27,7 @@ const CreateNewComment = ({ getComments, postId }: CreateNewCommentProps) => {
           headers: { Authorization: Cookies.get("token") },
         }
       )
-      .then((res) => {
-        console.log(res.data);
+      .then(() => {
         setComment("");
         if (getComments) {
           getComments();
