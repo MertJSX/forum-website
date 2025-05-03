@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import Explore from "./pages/Explore/Explore";
 import Profile from "./pages/Profile/Profile";
 import Post from "./pages/Post/Post";
+import EditPost from "./pages/EditPost/EditPost";
 
 function App() {
   return (
@@ -18,7 +19,9 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/explore" element={<Explore />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:userid" element={<Profile />} />
         <Route path="/post/:postid" element={<Post />} />
+        <Route path="/editpost/:postid" element={<EditPost />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
