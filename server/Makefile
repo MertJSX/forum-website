@@ -1,5 +1,8 @@
 start:
 	go run main.go
+start2:
+	CGO_ENABLED=1 go build -o server main.go
+	./server
 test:
 	gotestsum --format testname ./tests/
 setup:
