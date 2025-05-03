@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar/Navbar"
-import CreateNewPost from "../../components/CreateNewPost/CreateNewPost"
 import Posts from "../../components/Posts/Posts"
 import axios from "axios";
 
@@ -19,12 +18,10 @@ const Explore = () => {
   }
   useEffect(() => {
     getPosts();
-  }
-  , []);
+  }, []);
   return (
     <div>
         <Navbar />
-        <CreateNewPost getPosts={getPosts} />
         <h1 className="text-white text-2xl text-center mt-10">Explore newest posts!</h1>
         <Posts posts={posts} />
     </div>
