@@ -1,17 +1,18 @@
 import axios from "axios";
 import { useState } from "react";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
 
 type CreateNewPostProps = {
   getPosts?: () => void;
 };
 
 const CreateNewPost = ({getPosts}: CreateNewPostProps) => {
+  const navigate = useNavigate();
   let [title, setTitle] = useState<string>("");
   let [content, setContent] = useState<string>("");
   function handleCreateNewPost(e: React.FormEvent) {
     e.preventDefault();
-
     axios
       .post(
         "/api/create-post",
@@ -25,6 +26,7 @@ const CreateNewPost = ({getPosts}: CreateNewPostProps) => {
       )
       .then((res) => {
         console.log(res.data);
+        navigate("/post/" + res.data.postID);
         setTitle("");
         setContent("");
         if (getPosts) {
