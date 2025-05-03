@@ -6,6 +6,7 @@ A full-stack forum website designed for educational discussions, built with mode
 - Database: SQLite (Lightweight, file-based database)
 
 ## How to setup
+If you don't have "Make" you can download it for Windows with Chocolatey. Just type ```choco install make```.
 - Clone the project
 - Run ```make setup``` in /server
 - Run ```npm install``` in /client
