@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/MertJSX/forum-website/server/types"
 	"github.com/MertJSX/forum-website/server/utils"
 	"github.com/gofiber/fiber/v2"
 )
 
-func CheckAuth(c *fiber.Ctx) error {
+func CheckAuth(c *fiber.Ctx, jwtsecret string) error {
 	var token string = c.Get("Authorization")
 	if token == "" {
 		return c.Status(401).JSON(types.ErrorResponse{
@@ -21,13 +22,16 @@ func CheckAuth(c *fiber.Ctx) error {
 	var username string
 	var err error
 
-	if userID, username, err = utils.VerifyToken(token, "test"); err != nil {
+	if userID, username, err = utils.VerifyToken(token, jwtsecret); err != nil {
 		fmt.Println("Error: ", err)
 		return c.Status(401).JSON(types.ErrorResponse{
 			IsError:  true,
 			ErrorMsg: "Invalid token",
 		})
 	}
+
+	log.Println("User ID: ", userID)
+	log.Println("Username: ", username)
 
 	c.Locals("userID", userID)
 	c.Locals("username", username)
