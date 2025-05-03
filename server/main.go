@@ -43,6 +43,10 @@ func main() {
 	}
 	var PORT string = fmt.Sprintf(":%d", config.Port)
 
+	app.Use("/", func(c *fiber.Ctx) error {
+		return routes.Logger(c)
+	})
+
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.SendString("Hello, World!")
 	})
