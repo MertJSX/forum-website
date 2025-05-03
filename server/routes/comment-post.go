@@ -11,7 +11,7 @@ import (
 func HandleCommentPost(c *fiber.Ctx, db *sql.DB) error {
 	var comment types.Comment
 
-	comment.UserId = c.Locals("userID").(*int)
+	comment.UserId = c.Locals("userID").(string)
 
 	if err := c.BodyParser(&comment); err != nil {
 		return c.Status(fiber.StatusBadRequest).SendString("Invalid request body")

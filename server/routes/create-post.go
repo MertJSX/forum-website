@@ -29,7 +29,8 @@ func HandleCreatePost(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
-	if err := database.CreateNewPost(db, newPost); err != nil {
+	postID, err := database.CreateNewPost(db, newPost)
+	if err != nil {
 		fmt.Println("Error creating post:", err)
 		return c.Status(500).JSON(types.ErrorResponse{
 			IsError:  true,
@@ -37,5 +38,8 @@ func HandleCreatePost(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
-	return c.SendString("Post has created!")
+	return c.JSON(fiber.Map{
+		"message": "Post has been created!",
+		"postID":  postID,
+	})
 }

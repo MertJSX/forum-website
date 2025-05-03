@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func HandleLoginUser(c *fiber.Ctx, db *sql.DB) error {
+func HandleLoginUser(c *fiber.Ctx, db *sql.DB, jwtsecret string) error {
 	loginReqBody := new(types.LoginRequest)
 
 	if err := c.BodyParser(loginReqBody); err != nil {
@@ -40,9 +40,9 @@ func HandleLoginUser(c *fiber.Ctx, db *sql.DB) error {
 	if err == nil && foundUser != nil {
 		user.Name = foundUser[0].Name
 		user.ID = foundUser[0].ID
-		var userID string = fmt.Sprintf("%d", *user.ID)
+		var userID string = fmt.Sprintf("%d", *foundUser[0].ID)
 
-		token, err := utils.CreateToken(userID, user.Name, "test")
+		token, err := utils.CreateToken(userID, foundUser[0].Name, jwtsecret)
 
 		if err != nil {
 			return c.Status(500).JSON(types.ErrorResponse{
