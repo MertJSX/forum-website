@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/MertJSX/forum-website/server/types"
 	"github.com/MertJSX/forum-website/server/utils"
@@ -29,9 +28,6 @@ func CheckAuth(c *fiber.Ctx, jwtsecret string) error {
 			ErrorMsg: "Invalid token",
 		})
 	}
-
-	log.Println("User ID: ", userID)
-	log.Println("Username: ", username)
 
 	c.Locals("userID", userID)
 	c.Locals("username", username)
