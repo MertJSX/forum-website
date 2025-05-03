@@ -2,7 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { FaUserAlt } from "react-icons/fa";
-import GetProfile from "../../utils/getProfile";
+import GetProfile from "../../utils/GetProfile";
 import { useNavigate } from "react-router";
 
 type CreateNewCommentProps = {
@@ -42,7 +42,7 @@ const CreateNewComment = ({ getComments, postId }: CreateNewCommentProps) => {
   }
 
   useEffect(() => {
-    GetProfile.then((res) => {
+    GetProfile(Cookies.get("token")).then((res) => {
         setProfile(res);
       }).catch((err: string) => {
         if (err === "Unauthorized") {
@@ -54,18 +54,18 @@ const CreateNewComment = ({ getComments, postId }: CreateNewCommentProps) => {
     <div className="w-full">
       <form
         onSubmit={handleCreateNewPost}
-        className="flex flex-col items-center mt-10 w-1/2 justify-center mx-auto"
+        className="flex flex-col items-center mt-10 w-2/3 justify-center mx-auto"
       >
         {
             profile ? (
                 <div className="flex w-full justify-left ml-0 items-center mb-2 gap-2">
-                    <FaUserAlt className="text-6xl bg-neutral-600 p-1 rounded-xl text-white" />
-                    <h1 className="text-white text-2xl text-left">{profile.username}</h1>
+                    <FaUserAlt className="text-6xl bg-blue-600 p-1 rounded-xl text-white" />
+                    <h1 className="text-white text-2xl text-left">{profile.user.username}</h1>
                 </div>
                 ) : null
         }
         <textarea
-          placeholder="Comment"
+          placeholder="Your comment..."
           rows={4}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
