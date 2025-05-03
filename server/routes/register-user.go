@@ -2,7 +2,6 @@ package routes
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/MertJSX/forum-website/server/database"
 	"github.com/MertJSX/forum-website/server/types"
@@ -18,8 +17,6 @@ func HandleRegisterUser(c *fiber.Ctx, db *sql.DB) error {
 			ErrorMsg: "Bad request",
 		})
 	}
-
-	fmt.Println(user)
 
 	if user.Name == "" || user.Email == "" || user.Password == "" {
 		return c.Status(400).JSON(types.ErrorResponse{

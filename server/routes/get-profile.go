@@ -44,9 +44,7 @@ func HandleGetProfile(c *fiber.Ctx, db *sql.DB) error {
 		})
 	}
 
-	isFollowing, err := database.IsUserFollowing(db, c.Locals("userID").(string), fmt.Sprintf("%d", *user[0].ID))
-
-	fmt.Println(err)
+	isFollowing, _ := database.IsUserFollowing(db, c.Locals("userID").(string), fmt.Sprintf("%d", *user[0].ID))
 
 	return c.JSON(fiber.Map{
 		"isMe":        c.Locals("userID") == fmt.Sprintf("%d", *user[0].ID),

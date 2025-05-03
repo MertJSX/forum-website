@@ -17,7 +17,6 @@ func HandleDeletePost(c *fiber.Ctx, db *sql.DB) error {
 
 	userID := c.Locals("userID").(string)
 
-	// Check if the user is the author of the post
 	isAuthor, err := database.IsPostAuthor(db, userID, postID)
 
 	if err != nil {
