@@ -33,7 +33,11 @@ const SignIn = () => {
           return
         }
         console.log(data.data.token);
-        Cookies.set("token", data.data.token);
+        if (rememberMe) {
+          Cookies.set("token", data.data.token, { expires: 7 });
+        } else {
+          Cookies.set("token", data.data.token);
+        }
         navigate("/")
         setEmailOrUsername("");
       })
