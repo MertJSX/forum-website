@@ -15,10 +15,11 @@ import (
 )
 
 func TestHandleLoginUser(t *testing.T) {
+	var jwtsecret string = "testsecret"
 	app := fiber.New()
 	var db *sql.DB = GetTestDB() // Mock or use a test database connection
 	app.Post("/login-user", func(c *fiber.Ctx) error {
-		return routes.HandleLoginUser(c, db)
+		return routes.HandleLoginUser(c, db, jwtsecret)
 	})
 
 	t.Run("User Login", func(t *testing.T) {
