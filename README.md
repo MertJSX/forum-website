@@ -1,4 +1,7 @@
 # Forum website
+## Examples
+![image](https://github.com/user-attachments/assets/b4d1fa9b-f343-4228-bb7b-845fc244267b)
+
 ## Project Overview
 A full-stack forum website designed for educational discussions, built with modern web technologies:
 - Frontend: Vite + React + TypeScript (Fast, type-safe client application)
